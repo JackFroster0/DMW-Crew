@@ -1,3 +1,4 @@
+using Sirenix.Serialization;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,21 +7,24 @@ using UnityEngine;
 
 public class PoolingManager : SingletonMonoBehaviour<PoolingManager>
 {
-  
-    Dictionary<IdentityType, List<Entity>> spawnedEntities = new Dictionary<IdentityType, List<Entity>>();
+
+
+   public Dictionary<IdentityType, List<Entity>> spawnedEntities = new Dictionary<IdentityType, List<Entity>>();
 
    public Entity GetPrefab(IdentityType entityType)
     {
 
         if (spawnedEntities.ContainsKey(entityType))
         {
-            foreach(var entity in spawnedEntities[entityType])
+            foreach(var _entity in spawnedEntities[entityType])
             {
-                if (entity.gameObject.activeInHierarchy)
+                if (_entity.gameObject.activeInHierarchy)
                 {
                     continue;
                 }
-                return spawnedEntities[entityType].FirstOrDefault();
+
+                _entity.gameObject.SetActive(true);
+                return _entity;
             }           
         }
         
